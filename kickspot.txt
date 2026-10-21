@@ -1,0 +1,104 @@
+from pathlib import Path
+
+html = r'''<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Discover stylish finds, useful gadgets and everyday favorites.">
+<title>PinFinds — Curated Finds</title>
+<style>
+:root{--ink:#20211f;--muted:#73756f;--paper:#fbfaf7;--card:#fff;--accent:#bd3e35;--line:#e9e6df;--soft:#f2eee7}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+a{color:inherit}.announcement{background:#262723;color:#fff;text-align:center;padding:9px 14px;font-size:12px;letter-spacing:.08em}
+header{max-width:1220px;margin:auto;padding:22px 28px;display:flex;align-items:center;justify-content:space-between;gap:20px;border-bottom:1px solid var(--line)}
+.logo{font-family:Georgia,serif;font-size:30px;font-weight:700;letter-spacing:-1.4px}.logo span{color:var(--accent)}nav{display:flex;gap:22px;font-size:13px;color:var(--muted)}nav a{text-decoration:none}nav a:hover{color:var(--accent)}
+.hero{max-width:1220px;margin:auto;padding:64px 28px 48px;display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.eyebrow{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);font-weight:750}
+h1{font-family:Georgia,serif;font-weight:500;font-size:clamp(44px,6vw,76px);line-height:.99;letter-spacing:-2.8px;margin:17px 0 22px;max-width:620px}
+.hero p{font-size:16px;line-height:1.75;color:var(--muted);max-width:490px}
+.hero-art{min-height:330px;border-radius:180px 180px 12px 12px;overflow:hidden;background:linear-gradient(145deg,#e9d8c7,#d6c5b0);position:relative;display:flex;align-items:center;justify-content:center}
+.hero-art img{width:100%;height:370px;object-fit:cover;mix-blend-mode:multiply;opacity:.92}
+.hero-label{position:absolute;bottom:18px;left:18px;background:#fffdf5eF;padding:13px 17px;border-radius:5px;font-family:Georgia,serif;font-size:18px}
+.controls{max-width:1220px;margin:auto;padding:12px 28px 24px;display:flex;justify-content:space-between;gap:18px;align-items:center;flex-wrap:wrap}
+.filters{display:flex;gap:8px;flex-wrap:wrap}.filter{border:1px solid var(--line);background:transparent;padding:10px 15px;border-radius:30px;cursor:pointer;font-size:12px;color:var(--muted)}.filter.active,.filter:hover{background:var(--ink);color:white;border-color:var(--ink)}
+.search{padding:12px 15px;border:1px solid var(--line);background:white;border-radius:30px;min-width:230px;font:inherit;font-size:13px;outline-color:var(--accent)}
+.section-head{max-width:1220px;margin:0 auto;padding:18px 28px 24px;display:flex;justify-content:space-between;align-items:end;gap:20px}.section-head h2{font:500 36px/1.1 Georgia,serif;letter-spacing:-1px;margin:7px 0 0}.section-head p{color:var(--muted);font-size:12px}
+.grid{max-width:1220px;margin:auto;padding:0 28px 70px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px 18px}
+.product{min-width:0}.product-image{position:relative;background:var(--soft);aspect-ratio:4/5;border-radius:7px;overflow:hidden}.product-image img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .45s}.product:hover .product-image img{transform:scale(1.04)}
+.tag{position:absolute;top:12px;left:12px;background:#fffdf0;padding:7px 10px;border-radius:3px;font-size:10px;letter-spacing:.07em;text-transform:uppercase}
+.pin-hint{position:absolute;right:12px;bottom:12px;background:#fff;padding:8px 10px;border-radius:30px;font-size:11px;text-decoration:none;box-shadow:0 2px 12px #0001}
+.product-info{padding:14px 2px 0}.product-cat{font-size:10px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted)}.product h3{font:500 20px/1.2 Georgia,serif;margin:8px 0}.desc{font-size:12px;line-height:1.6;color:var(--muted);min-height:38px}.product-bottom{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:14px}.price{font-size:14px;font-weight:700}.buy{border:0;background:var(--accent);color:#fff;padding:10px 12px;border-radius:3px;text-decoration:none;font-size:11px;font-weight:700;white-space:nowrap}.buy:hover{filter:brightness(.9)}
+.empty{grid-column:1/-1;padding:45px;text-align:center;color:var(--muted)}
+.note{max-width:1164px;margin:0 auto 60px;padding:22px 25px;background:#f2eee7;border-radius:6px;font-size:12px;line-height:1.7;color:#5d5d56}
+footer{background:#262723;color:white;padding:38px 28px}.footer-inner{max-width:1164px;margin:auto;display:flex;justify-content:space-between;gap:30px;flex-wrap:wrap}.footer-inner p{color:#c8c7c0;font-size:12px;line-height:1.7;max-width:470px}.footer-inner a{color:white;font-size:12px}
+@media(max-width:900px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.hero{gap:22px;padding-top:42px}.hero-art{min-height:280px}.hero-art img{height:320px}}
+@media(max-width:600px){header{padding:18px 17px}nav{gap:12px}.logo{font-size:25px}nav a:nth-child(2){display:none}.hero{grid-template-columns:1fr;padding:42px 18px 28px;gap:24px}.hero-art{min-height:250px;border-radius:120px 120px 8px 8px}.hero-art img{height:280px}.controls,.section-head{padding-left:18px;padding-right:18px}.search{width:100%}.grid{padding:0 18px 48px;gap:24px 12px}.product h3{font-size:18px}.desc{min-height:55px}.product-bottom{align-items:flex-start;flex-direction:column}.buy{width:100%;text-align:center}.section-head h2{font-size:31px}.note{margin:0 18px 42px}}
+</style>
+</head>
+<body>
+<div class="announcement">THE EDIT: LITTLE FINDS THAT MAKE EVERYDAY BETTER</div>
+<header>
+  <a class="logo" href="#" style="text-decoration:none">pin<span>finds.</span></a>
+  <nav><a href="#shop">Shop finds</a><a href="#about">About</a><a href="#disclosure">Disclosure</a></nav>
+</header>
+<main>
+<section class="hero">
+  <div>
+    <div class="eyebrow">Curated with a little intention</div>
+    <h1>Good finds.<br>Better everyday.</h1>
+    <p>A considered collection of clever gadgets, cozy essentials and everyday style worth saving. Find something you love, then shop it in a click.</p>
+  </div>
+  <div class="hero-art">
+    <img src="https://images.unsplash.com/photo-1490312278390-ab64016e0aa9?auto=format&fit=crop&w=1000&q=85" alt="Warm, curated lifestyle interior">
+    <div class="hero-label">Your next favourite find ↗</div>
+  </div>
+</section>
+<section id="shop">
+  <div class="controls">
+    <div class="filters" id="filters">
+      <button class="filter active" data-category="All">All finds</button>
+      <button class="filter" data-category="Tech">Tech</button>
+      <button class="filter" data-category="Home">Home</button>
+      <button class="filter" data-category="Style">Style</button>
+      <button class="filter" data-category="Fitness">Fitness</button>
+    </div>
+    <input class="search" id="search" type="search" placeholder="Search the collection…" aria-label="Search products">
+  </div>
+  <div class="section-head">
+    <div><div class="eyebrow">The shortlist</div><h2>Finds worth a closer look</h2></div>
+    <p id="count">8 curated finds</p>
+  </div>
+  <div class="grid" id="products"></div>
+</section>
+<section class="note" id="disclosure"><strong>Affiliate disclosure:</strong> Some links on this page may be affiliate links. If you buy through them, the site owner may earn a commission at no extra cost to you. Product names, prices, images and availability are examples until you replace them with verified details. Only use affiliate URLs from programs you have joined and been approved for.</section>
+</main>
+<footer id="about"><div class="footer-inner"><div><div class="logo" style="color:white">pinf<span>inds.</span></div><p>A little corner of the internet for thoughtful finds, useful things and everyday inspiration.</p></div><div><strong>Keep it transparent</strong><p>Always check current prices and product details with the retailer. Affiliate links should be clearly disclosed.</p><a href="#disclosure">Read our disclosure ↑</a></div></div></footer>
+<script>
+/* EDIT THIS LIST: Replace each demo item with a real product and your own approved affiliate URL. */
+const products = [
+ {name:"Everyday Wireless Earbuds",category:"Tech",price:"₹1,999",tag:"Tech pick",desc:"A compact audio companion for commutes and playlists.",image:"https://images.unsplash.com/photo-1606220945770-b5b6c2c55bf1?auto=format&fit=crop&w=700&q=80",url:"https://example.com/your-affiliate-link"},
+ {name:"Minimal Desk Lamp",category:"Home",price:"₹1,499",tag:"Home edit",desc:"A warm glow for your reading nook or work desk.",image:"https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=700&q=80",url:"https://example.com/your-affiliate-link"},
+ {name:"Everyday Crossbody Bag",category:"Style",price:"₹1,299",tag:"Easy style",desc:"A simple, versatile shape for everyday essentials.",image:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?auto=format&fit=crop&w=700&q=80",url:"https://example.com/your-affiliate-link"},
+ {name:"Insulated Water Bottle",category:"Fitness",price:"₹799",tag:"Daily essential",desc:"A reusable bottle to keep hydration close at hand.",image:"https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=700&q=80",url:"https://example.com/your-affiliate-link"},
+ {name:"Clean Desk Keyboard",category:"Tech",price:"₹2,499",tag:"Desk upgrade",desc:"A tidy setup starts with a keyboard you enjoy using.",image:"https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&w=700&q=80",url:"https://example.com/your-affiliate-link"},
+ {name:"Ceramic Coffee Mug",category:"Home",price:"₹499",tag:"Slow mornings",desc:"A simple ceramic favourite for your coffee ritual.",image:"https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?auto=format&fit=crop&w=700&q=80",url:"https://example.com/your-affiliate-link"},
+ {name:"Classic Everyday Sneakers",category:"Style",price:"₹2,199",tag:"Style staple",desc:"An easy-to-style silhouette for casual days out.",image:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?auto=format&fit=crop&w=700&q=80",url:"https://example.com/your-affiliate-link"},
+ {name:"Training Resistance Bands",category:"Fitness",price:"₹599",tag:"Move more",desc:"A compact addition to home workouts and warm-ups.",image:"https://images.unsplash.com/photo-1598289431512-b97b0917affc?auto=format&fit=crop&w=700&q=80",url:"https://example.com/your-affiliate-link"}
+];
+let activeCategory="All";
+const grid=document.getElementById("products"),search=document.getElementById("search");
+function render(){
+ const q=search.value.trim().toLowerCase();
+ const shown=products.filter(p=>(activeCategory==="All"||p.category===activeCategory)&&`${p.name} ${p.category} ${p.desc}`.toLowerCase().includes(q));
+ document.getElementById("count").textContent=`${shown.length} ${shown.length===1?"find":"curated finds"}`;
+ grid.innerHTML=shown.length?shown.map(p=>`<article class="product"><div class="product-image"><img loading="lazy" src="${p.image}" alt="${p.name}"><span class="tag">${p.tag}</span><a class="pin-hint" href="https://www.pinterest.com/" target="_blank" rel="noopener noreferrer" aria-label="Open Pinterest">↗ Save idea</a></div><div class="product-info"><div class="product-cat">${p.category}</div><h3>${p.name}</h3><div class="desc">${p.desc}</div><div class="product-bottom"><span class="price">${p.price}</span><a class="buy" href="${p.url}" target="_blank" rel="sponsored nofollow noopener noreferrer">VIEW FIND ↗</a></div></div></article>`).join(""):`<div class="empty">No finds match that search. Try another word or category.</div>`;
+}
+document.getElementById("filters").addEventListener("click",e=>{const b=e.target.closest("button[data-category]");if(!b)return;activeCategory=b.dataset.category;document.querySelectorAll(".filter").forEach(x=>x.classList.toggle("active",x===b));render()});
+search.addEventListener("input",render);render();
+</script>
+</body>
+</html>'''
+path = Path("/mnt/data/pinfinds_affiliate_website.html")
+path.write_text(html, encoding="utf-8")
+print(f"Website created: {path}\nSize: {path.stat().st_size:,} bytes")
